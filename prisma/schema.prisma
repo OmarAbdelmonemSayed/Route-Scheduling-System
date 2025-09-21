@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum DriverlicenseType {
+  A // → Motorcycle
+  B // → Car / small vehicles
+  C // → Truck / heavy vehicles
+  D // → Bus
+  E // → Trailer / articulated vehicles
+}
+
+enum RouteStatus {
+  UNASSIGNED
+  ACTIVE
+  COMPLETED
+}
+
+model Driver {
+  id           String            @id @default(uuid())
+  name         String
+  licenseType  DriverlicenseType
+  availability Boolean           @default(true)
+  routes       Route[]
+}
+
+model Route {
+  id            String      @id @default(uuid())
+  startLocation String
+  endLocation   String
+  distance      Int // KM
+  estimatedTime Int // Hours
+  status        RouteStatus @default(UNASSIGNED)
+  driverId      String?
+  driver        Driver?     @relation(fields: [driverId], references: [id], onDelete: SetNull)
+}
