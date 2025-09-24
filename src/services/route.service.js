@@ -53,6 +53,17 @@ const finishRouteById = async (routeId) => {
         if (!route) {
             throw new CustomError(404, 'Route not found');
         }
+        const driver = await prisma.driver.update({
+            where: {
+                id: route.driverId
+            },
+            data: {
+                availability: true
+            }
+        });
+        if (!driver) {
+            throw new CustomError(404, 'Driver not found');
+        }
         return route;
     }
 
