@@ -21,13 +21,7 @@ export default function errorHandler(err, req, res, next) {
         statusCode = 500;
         message = `Unexpected error: ${err}`;
     }
-
-    // Zod errors
-    if (err.name === "ZodError") {
-        statusCode = 400;
-        message = err.issues.map((e) => e.message).join(", ");
-    }
-
+    
     // Custom errors
     if (err.statusCode) {
         statusCode = err.statusCode;
